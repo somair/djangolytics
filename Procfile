@@ -1,1 +1,1 @@
-web: waitress-serve djangolyntics.wsgi:application
+web: waitress-serve --port=$PORT djangolyntics.wsgi:application
