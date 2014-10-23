@@ -65,7 +65,7 @@ def select_date(request):
             return HttpRedirect("/hit_api") #TODO this is wrong
     else:
         date_pick_form = StartEndDateForm()
-    return render("googleAnalytics/pick_date.html", {"form": date_pick_form})
+    return render(request, "googleAnalytics/pick_date.html", {"form": date_pick_form})
 
 @login_required
 def dot_chart(request):
