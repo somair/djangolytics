@@ -5,6 +5,7 @@ import os
 # Django imports
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.http import HttpResponseBadRequest
@@ -34,16 +35,19 @@ def index(request):
     storage = Storage(CredentialsModel, "id", request.user, "credential")
     credential = storage.get()
     if credential is None or credential.invalid == True:
-        # Initiate the OAuth process
+        # User not authenticated. Initiate the OAuth process
         FLOW.params["state"] = xsrfutil.generate_token(settings.SECRET_KEY,
                                                        request.user)
         # Ask Google to generate an authorizing page
         authorize_url = FLOW.step1_get_authorize_url()
         return HttpResponseRedirect(authorize_url) # Go to Authorizing page
     else:
+        # User is authenticated
         service = get_service_object(credential)
         profile_id = get_first_profile_id(service)
-        return HttpResponse(profile_id)
+        results = get_results(service, profile_id)
+        #return HttpResponse(profile_id)
+        return render_to_response("index.html", results)
 
 @login_required
 def auth_return(request):

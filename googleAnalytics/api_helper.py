@@ -14,14 +14,24 @@ def get_first_profile_id(service):
     accounts = service.management().accounts().list().execute()
     if accounts and accounts.get('items'):
         firstAccountId = accounts.get('items')[0].get('id')
+        # Get a webproperties list with the first account's id
         webproperties = service.management().webproperties().list(
                 accountId=firstAccountId).execute()
         if webproperties and webproperties.get('items'):
             firstWebpropertyId = webproperties.get('items')[0].get('id')
+            # Get a profiles list with the first webproperties' id
             profiles = service.management().profiles().list(
                     accountId=firstAccountId,
                     webPropertyId=firstWebpropertyId).execute()
-            if profiles.get('items'):
+            if profiles and profiles.get('items'):
+                # Select and return the first profile id
                 return profiles.get('items')[0].get('id')
-    return None
+    return None # One of the many previous steps have failed
+
+def get_results(service, profile_id):
+    return service.data().ga().get(
+            ids='ga:' + profile_id,
+            start_date='2014-10-06',
+            end_date='2014-10-06',
+            metrics='ga:sessions').execute()
 
