@@ -57,7 +57,7 @@ def auth_return(request):
                                    request.REQUEST["state"], request.user):
         return HttpResponseBadRequest()
     # Exchange the Auth code for a OAuth Token
-    credential = FLOW.step2_exchange(request.REQUEST)
+    credential = FLOW.step2_exchange(request.GET)
     storage = Storage(CredentialsModel, "id", request.user, "credential")
     storage.put(credential) # Store the token with reference to this user
     return HttpResponseRedirect("/")
