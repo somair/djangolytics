@@ -1,21 +1,7 @@
 {% block content %}
 
-<p>Welcome: {{ profile_name }}</p>
-<p>Total Sessions: {{ sessions }}</p>
+<a href="/pick_date">Update database</a>
 
-{# TODO use a django form for the sake of validation #}
-<form method="get" action="{% url "googleAnalytics.views.hit_api" %}">{% csrf_token %}
-    <table>
-        <tr>
-            <td>Start date:</td>
-            <td><input type="text" name="start_date" placeholder="In the format of YYYY-MM-DD"/></td>
-        </tr>
-        <tr>
-            <td>End date:</td>
-            <td><input type="text" name="end_date" placeholder="In the format of YYYY-MM-DD"/></td>
-        </tr>
-    </table>
-    <input type="submit" value="query api" />
-</form>
+<a href="/dot_chart">View dot chart</a>
 
 {% endblock %}

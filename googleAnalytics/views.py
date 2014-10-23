@@ -17,6 +17,7 @@ from oauth2client.django_orm import Storage
 from djangolytics import settings
 from googleAnalytics.models import CredentialsModel
 from googleAnalytics.models import HourlySessions
+from googleAnalytics.forms import StartEndDateForm
 from googleAnalytics.api_helper import get_first_profile_id
 from googleAnalytics.api_helper import get_service_object
 from googleAnalytics.api_helper import get_hourly_sessions
@@ -31,6 +32,8 @@ FLOW = OAuth2WebServerFlow(client_id = os.environ["GA_CLIENT_ID"],
                            client_secret = os.environ["GA_CLIENT_SECRET"],
                            scope = SCOPE,
                            redirect_uri = REDIRECT_URI)
+
+# TODO combine a few of these views to reduce the number of urls used.
 
 @login_required
 def index(request):
@@ -54,6 +57,21 @@ def index(request):
             })
 
 @login_required
+def select_date(request):
+    if request.method == "POST":
+        # Process the form data
+        date_pick_form = StartEndDateForm(request.POST)
+        if date_pick_form.is_valid()
+            return HttpRedirect("/hit_api") #TODO this is wrong
+    else:
+        date_pick_form = StartEndDateForm()
+    return render("googleAnalytics/pick_date.html", {"form": date_pick_form}
+
+@login_required
+def dot_chart(request):
+    return HttpResponse("This is a stub")
+
+@login_required
 def hit_api(request):
     storage = Storage(CredentialsModel, "id", request.user, "credential")
     credential = storage.get() # Attempt to load the user's credentials
@@ -66,6 +84,7 @@ def hit_api(request):
         profile_id = get_first_profile_id(service)
 
         # Query the API
+        # TODO make sure these values exist before doing things with them
         results = get_hourly_sessions(request.GET["start_date"],
                                       request.GET["end_date"],
                                       service, profile_id)
