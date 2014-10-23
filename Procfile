@@ -1,1 +1,1 @@
-web: waitress-serve --port=$PORT djangolytics.wsgi:application --expose-tracebacks
+web: gunicorn djangolytics.wsgi:application
