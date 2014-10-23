@@ -28,10 +28,13 @@ def get_first_profile_id(service):
                 return profiles.get('items')[0].get('id')
     return None # One of the many previous steps have failed
 
-def get_hourly_sessions(start_date, end_date, service, profile_id):
+def get_hourly_sessions(start_datetime, end_datetime, service, profile_id):
+    start_date_str = datetime.strftime(start_datetime, "%Y-%m-%d")
+    end_date_str = datetime.strftime(end_datetime, "%Y-%m-%d")
     return service.data().ga().get(
             ids='ga:' + profile_id,
-            start_date='2014-10-06',
-            end_date='2014-10-06',
+            start_date=start_date_str,
+            end_date=end_date_str,
+            dimensions="ga:date,ga:hour",
             metrics='ga:sessions').execute()
 
