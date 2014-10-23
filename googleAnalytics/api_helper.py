@@ -5,7 +5,7 @@ def get_service_object(credential):
     """Creates a service object for the google analytics api"""
     http = httplib2.Http()  # Get a http object
     http = credential.authorize(http) # Auth it with our fancy credentials
-    service = build("analytics", "v3", http=http)
+    return build("analytics", "v3", http=http)
 
 def get_first_profile_id(service):
     """Returns the profile id of the user. Stolen from the tutorial:
