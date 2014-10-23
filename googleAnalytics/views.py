@@ -16,6 +16,7 @@ from oauth2client.django_orm import Storage
 # Project imports
 from djangolytics import settings
 from googleAnalytics.models import CredentialsModel
+from googleAnalytics.models import HourlySessions
 from googleAnalytics.api_helper import get_first_profile_id
 from googleAnalytics.api_helper import get_service_object
 from googleAnalytics.api_helper import get_results
@@ -34,7 +35,7 @@ FLOW = OAuth2WebServerFlow(client_id = os.environ["GA_CLIENT_ID"],
 @login_required
 def index(request):
     storage = Storage(CredentialsModel, "id", request.user, "credential")
-    credential = storage.get()
+    credential = storage.get() # Attempt to load the user's credentials
     if credential is None or credential.invalid == True:
         # User not authenticated. Initiate the OAuth process
         FLOW.params["state"] = xsrfutil.generate_token(settings.SECRET_KEY,
@@ -46,11 +47,38 @@ def index(request):
         # User is authenticated
         service = get_service_object(credential)
         profile_id = get_first_profile_id(service)
-        results = get_results(service, profile_id)
+        #results = get_results(service, profile_id)
         return render_to_response("googleAnalytics/index.html", {
-            "profile_name": results.get("profileInfo").get("profileName"),
-            "sessions": results.get("rows")[0][0]
+            "profile_name": None,
+            "sessions": None
             })
+
+@login_required
+def hit_api(request):
+    storage = Storage(CredentialsModel, "id", request.user, "credential")
+    credential = storage.get() # Attempt to load the user's credentials
+    if credential is None or credential.invalid == True:
+        # User is not authorized. Go to the index to get authorized.
+        return HttpResponseRedirect("/")
+    else:
+        # User is authorized.
+        service = get_service_object(credential)
+        profile_id = get_first_profile_id(service)
+        # Go to the index with new records in the database
+        query_string_params = request.GET() # Get the query string parameters
+
+        # Query the API
+        results = get_hourly_sessions(query_string_params["start_date"],
+                                      query_string_params["end_date"],
+                                      service, profile_id)
+        rows = results.get("rows")
+        for datestr, hour, num_sessions in rows:
+            new_model = HourlySessions(date = datetime.strftime(datestr, "%Y%m%d"),
+                                 hour = int(hour),
+                                 num_sessions = int(num_sessions))
+        # TODO communicate that the db has been updated
+        return HttpResponseRedirect("/")
+
 
 @login_required
 def auth_return(request):

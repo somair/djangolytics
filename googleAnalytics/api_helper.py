@@ -28,7 +28,7 @@ def get_first_profile_id(service):
                 return profiles.get('items')[0].get('id')
     return None # One of the many previous steps have failed
 
-def get_results(service, profile_id):
+def get_hourly_sessions(start_date, end_date, service, profile_id):
     return service.data().ga().get(
             ids='ga:' + profile_id,
             start_date='2014-10-06',

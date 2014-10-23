@@ -1,6 +1,20 @@
 {% block content %}
 
-<p>First View (Profile): {{ profile_name }}</p>
+<p>Welcome: {{ profile_name }}</p>
 <p>Total Sessions: {{ sessions }}</p>
+
+<form method="get" action="{% url "googleAnalytics.views.hit_api" %}">{% csrf_token %}
+    <table>
+        <tr>
+            <td>Start date:</td>
+            <td><input type="text" placeholder="In the format of YYYY-MM-DD"/></td>
+        </tr>
+        <tr>
+            <td>End date:</td>
+            <td><input type="text" placeholder="In the format of YYYY-MM-DD"/></td>
+        </tr>
+    </table>
+    <input type="submit" value="query api" />
+</form>
 
 {% endblock %}

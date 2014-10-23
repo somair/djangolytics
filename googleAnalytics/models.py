@@ -8,5 +8,7 @@ class CredentialsModel(models.Model):
     id = models.ForeignKey(User, primary_key=True)
     credential = CredentialsField()
 
-class Sessions(models.Model):
-    start_datetime = models.DateTimeField("Session start time")
+class HourlySessions(models.Model):
+    date = models.DateTimeField("The date that the session occurred")
+    hour = models.IntegerField("The hour that the session occurred")
+    num_sessions = models.IntegerField("The number of sessions")
