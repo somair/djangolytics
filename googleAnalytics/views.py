@@ -47,7 +47,10 @@ def index(request):
         service = get_service_object(credential)
         profile_id = get_first_profile_id(service)
         results = get_results(service, profile_id)
-        return render_to_response("googleAnalytics/index.html", results)
+        return render_to_response("googleAnalytics/index.html", {
+            "profile_name": results.get("profileInfo").get("profileName"),
+            "sessions": results.get("rows")[0][0]
+            })
 
 @login_required
 def auth_return(request):

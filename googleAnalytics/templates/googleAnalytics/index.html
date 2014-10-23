@@ -1,8 +1,8 @@
 {% block content %}
 
 {% if results %}
-    <p>First View (Profile): {{ results.get("profileInfo").get( "profileName") }}</p>
-    <p>Total Sessions: {{ results.get("rows")[0][0] }}</p>
+    <p>First View (Profile): {{ profile_name }}</p>
+    <p>Total Sessions: {{ sessions }}</p>
 {% else %}
     <p>No results found</p>
 {% endif %}
