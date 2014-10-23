@@ -23,7 +23,8 @@ from googleAnalytics.models import CredentialsModel
 # Which apis the app is requesting access to
 SCOPE = "https://www.googleapis.com/auth/analytics.readonly"
 # Where should google return to after it has generated an Auth Code
-REDIRECT_URI = "http://localhost:8080/oauth2callback"
+#REDIRECT_URI = "http://localhost:8080/oauth2callback"
+REDIRECT_URI = "http://sleepy-river-9090.herokuapp.com/oauth2callback"
 
 FLOW = OAuth2WebServerFlow(client_id = os.environ["GA_CLIENT_ID"],
                            client_secret = os.environ["GA_CLIENT_SECRET"],
@@ -41,7 +42,7 @@ def index(request):
 
         # Ask Google to generate an authorizing page
         authorize_url = FLOW.step1_get_authorize_url()
-        return HttpResponseRedirect(authroize_url) # Go to Authorizing page
+        return HttpResponseRedirect(authorize_url) # Go to Authorizing page
     else:
         http = httplib2.Http()  # Get a http object
         http = credentials.authorize(http) # Auth it with our fancy credentials
