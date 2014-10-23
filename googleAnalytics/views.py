@@ -57,17 +57,6 @@ def index(request):
             })
 
 @login_required
-def select_date(request):
-    if request.method == "POST":
-        # Process the form data
-        date_pick_form = StartEndDateForm(request.POST)
-        if date_pick_form.is_valid():
-            return HttpRedirect("/hit_api") #TODO this is wrong
-    else:
-        date_pick_form = StartEndDateForm()
-    return render(request, "googleAnalytics/pick_date.html", {"form": date_pick_form})
-
-@login_required
 def dot_chart(request):
     return HttpResponse("This is a stub")
 
@@ -83,19 +72,32 @@ def hit_api(request):
         service = get_service_object(credential)
         profile_id = get_first_profile_id(service)
 
-        # Query the API
-        # TODO make sure these values exist before doing things with them
-        results = get_hourly_sessions(request.GET["start_date"],
-                                      request.GET["end_date"],
-                                      service, profile_id)
-        rows = results.get("rows")
-        for datestr, hour, num_sessions in rows:
-            # TODO only create the model if it does not already exist
-            new_model = HourlySessions(date = datetime.strftime(datestr, "%Y%m%d"),
-                                 hour = int(hour),
-                                 num_sessions = int(num_sessions))
-        # TODO communicate that the db has been updated
-        return HttpResponseRedirect("/")
+        if request.method == "GET":
+            date_pick_form = StartEndDateForm()
+            return render(request, "googleAnalytics/hit_api.html",
+                          {"form": date_pick_form})
+            # Process the form data
+        else:
+            date_pick_form = StartEndDateForm(request.POST)
+            return render(request, "googleAnalytics/hit_api.html",
+                          {"form": date_pick_form})
+        if date_pick_form.is_valid():
+            # Query the API
+
+            # TODO make sure these hourly sessions don't exist before doing
+            #   things with them
+            results = get_hourly_sessions(request.GET["start_date"],
+                                          request.GET["end_date"],
+                                          service, profile_id)
+            rows = results.get("rows")
+            for datestr, hour, num_sessions in rows:
+                # TODO only create the model if it does not already exist
+                new_model = HourlySessions(date = datetime.strftime(datestr, "%Y%m%d"),
+                                     hour = int(hour),
+                                     num_sessions = int(num_sessions))
+            # TODO communicate that the db has been updated
+            return HttpResponse("Database updated")
+        return HttpResponse("")
 
 
 @login_required
