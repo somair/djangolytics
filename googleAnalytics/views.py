@@ -76,28 +76,25 @@ def hit_api(request):
             date_pick_form = StartEndDateForm()
             return render(request, "googleAnalytics/pick_date.html",
                           {"form": date_pick_form})
-            # Process the form data
         else:
+            # The request is POST
             date_pick_form = StartEndDateForm(request.POST)
+        if not date_pick_form.is_valid():
             return render(request, "googleAnalytics/pick_date.html",
                           {"form": date_pick_form})
-        if date_pick_form.is_valid():
-            # Query the API
 
-            # TODO make sure these hourly sessions don't exist before doing
-            #   things with them
-            results = get_hourly_sessions(request.GET["start_date"],
-                                          request.GET["end_date"],
-                                          service, profile_id)
-            rows = results.get("rows")
-            for datestr, hour, num_sessions in rows:
-                # TODO only create the model if it does not already exist
-                new_model = HourlySessions(date = datetime.strftime(datestr, "%Y%m%d"),
-                                     hour = int(hour),
-                                     num_sessions = int(num_sessions))
-            # TODO communicate that the db has been updated
-            return HttpResponse("Database updated")
-        return HttpResponse("")
+        # Query the API
+        results = get_hourly_sessions(request.GET["start_date"],
+                                      request.GET["end_date"],
+                                      service, profile_id)
+        rows = results.get("rows")
+        for datestr, hour, num_sessions in rows:
+            # TODO only create the model if it does not already exist
+            new_model = HourlySessions(date = datetime.strftime(datestr, "%Y%m%d"),
+                                 hour = int(hour),
+                                 num_sessions = int(num_sessions))
+        # TODO communicate that the db has been updated better. With redirect.
+        return HttpResponse("Database updated")
 
 
 @login_required
