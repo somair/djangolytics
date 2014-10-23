@@ -45,7 +45,7 @@ def index(request):
         return HttpResponseRedirect(authorize_url) # Go to Authorizing page
     else:
         http = httplib2.Http()  # Get a http object
-        http = credentials.authorize(http) # Auth it with our fancy credentials
+        http = credential.authorize(http) # Auth it with our fancy credentials
         service = build("analytics", "v3", http=http)
         accounts = service.management().accounts.list().execute()
         print accounts
