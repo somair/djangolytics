@@ -47,6 +47,7 @@ def index(request):
         # User is authenticated
         service = get_service_object(credential)
         profile_id = get_first_profile_id(service)
+        #results = get_results(service, profile_id)
         return render_to_response("googleAnalytics/index.html", {
             "profile_name": None,
             "sessions": None
@@ -63,12 +64,10 @@ def hit_api(request):
         # User is authorized.
         service = get_service_object(credential)
         profile_id = get_first_profile_id(service)
-        # Go to the index with new records in the database
-        query_string_params = request.GET() # Get the query string parameters
 
         # Query the API
-        results = get_hourly_sessions(query_string_params["start_date"],
-                                      query_string_params["end_date"],
+        results = get_hourly_sessions(request.GET["start_date"],
+                                      request.GET["end_date"],
                                       service, profile_id)
         rows = results.get("rows")
         for datestr, hour, num_sessions in rows:
