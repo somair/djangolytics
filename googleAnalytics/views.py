@@ -48,7 +48,8 @@ def index(request):
         http = credential.authorize(http) # Auth it with our fancy credentials
         service = build("analytics", "v3", http=http)
         profile_id = get_first_profile_id(service)
-        return render("YEPPPP %s".format(profile_id))
+        print profile_id
+        return render(profile_id))
 
 @login_required
 def auth_return(request):
