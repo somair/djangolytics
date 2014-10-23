@@ -18,6 +18,7 @@ from djangolytics import settings
 from googleAnalytics.models import CredentialsModel
 from googleAnalytics.api_helper import get_first_profile_id
 from googleAnalytics.api_helper import get_service_object
+from googleAnalytics.api_helper import get_results
 
 
 # Which apis the app is requesting access to
@@ -46,7 +47,6 @@ def index(request):
         service = get_service_object(credential)
         profile_id = get_first_profile_id(service)
         results = get_results(service, profile_id)
-        #return HttpResponse(profile_id)
         return render_to_response("index.html", results)
 
 @login_required
