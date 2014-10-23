@@ -74,12 +74,12 @@ def hit_api(request):
 
         if request.method == "GET":
             date_pick_form = StartEndDateForm()
-            return render(request, "googleAnalytics/hit_api.html",
+            return render(request, "googleAnalytics/pick_date.html",
                           {"form": date_pick_form})
             # Process the form data
         else:
             date_pick_form = StartEndDateForm(request.POST)
-            return render(request, "googleAnalytics/hit_api.html",
+            return render(request, "googleAnalytics/pick_date.html",
                           {"form": date_pick_form})
         if date_pick_form.is_valid():
             # Query the API
