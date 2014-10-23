@@ -84,8 +84,8 @@ def hit_api(request):
                           {"form": date_pick_form})
 
         # Query the API
-        results = get_hourly_sessions(request.GET["start_date"],
-                                      request.GET["end_date"],
+        results = get_hourly_sessions(request.POST["start_date"],
+                                      request.POST["end_date"],
                                       service, profile_id)
         rows = results.get("rows")
         for datestr, hour, num_sessions in rows:
