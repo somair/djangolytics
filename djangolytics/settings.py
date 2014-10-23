@@ -1,5 +1,5 @@
 """
-Django settings for djangolyntics project.
+Django settings for djangolytics project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -51,9 +51,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'djangolyntics.urls'
+ROOT_URLCONF = 'djangolytics.urls'
 
-WSGI_APPLICATION = 'djangolyntics.wsgi.application'
+WSGI_APPLICATION = 'djangolytics.wsgi.application'
 
 
 # Database

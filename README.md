@@ -1,5 +1,5 @@
 
-# Djangolyntics
+# Djangolytics
 
 This Django app plays with the Google analytics api and displays some
 calculated metrics.
