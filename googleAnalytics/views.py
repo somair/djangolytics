@@ -88,7 +88,6 @@ def hit_api(request):
                                       request.POST["end_date"],
                                       service, profile_id)
         rows = results.get("rows")
-        for datestr, hour, num_sessions in rows:
         for row in rows:
             datestr, hour, num_sessions = *row # Unpack the row for readability
             # TODO only create the model if it does not already exist
