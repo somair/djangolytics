@@ -89,11 +89,13 @@ def hit_api(request):
                                       service, profile_id)
         rows = results.get("rows")
         for datestr, hour, num_sessions in rows:
+        for row in rows:
+            datestr, hour, num_sessions = *row # Unpack the row for readability
             # TODO only create the model if it does not already exist
             new_model = HourlySessions(date = datetime.strftime(datestr, "%Y%m%d"),
                                  hour = int(hour),
                                  num_sessions = int(num_sessions))
-        # TODO communicate that the db has been updated better. With redirect.
+        # TODO communicate that the db has been updated better. With redirect?
         return HttpResponse("Database updated")
 
 
