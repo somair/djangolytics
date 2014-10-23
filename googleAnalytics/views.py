@@ -61,7 +61,7 @@ def select_date(request):
     if request.method == "POST":
         # Process the form data
         date_pick_form = StartEndDateForm(request.POST)
-        if date_pick_form.is_valid()
+        if date_pick_form.is_valid():
             return HttpRedirect("/hit_api") #TODO this is wrong
     else:
         date_pick_form = StartEndDateForm()
