@@ -92,7 +92,7 @@ def hit_api(request):
         for row in rows:
             #datestr, hour, num_sessions = *row # Unpack the row for readability
             # TODO only create the model if it does not already exist
-            new_model = HourlySessions(date = datetime.strftime(row[0], "%Y%m%d"),
+            new_model = HourlySessions(date = datetime.strptime(row[0], "%Y%m%d"),
                                  hour = int(row[1]),
                                  num_sessions = int(row[2]))
         # TODO communicate that the db has been updated better. With redirect?
