@@ -19,7 +19,7 @@ from djangolytics import settings
 from googleAnalytics.models import CredentialsModel
 from googleAnalytics.models import HourlyDataModel
 from googleAnalytics.forms import StartEndDateForm
-from googleAnalytics.api_helper import get_user_credential
+from googleAnalytics.api_helper import get_user_credentials
 from googleAnalytics.api_helper import get_service_object
 from googleAnalytics.api_helper import get_first_profile_id
 from googleAnalytics.api_helper import get_hourly_sessions

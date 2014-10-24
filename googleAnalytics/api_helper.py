@@ -1,5 +1,6 @@
 import httplib2
 from apiclient.discovery import build
+from googleAnalytics.models import CredentialsModel
 from oauth2client.django_orm import Storage
 
 def get_user_credentials(user):
