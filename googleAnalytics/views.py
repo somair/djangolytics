@@ -52,7 +52,6 @@ def index(request):
         # User is authenticated
         service = get_service_object(credential)
         profile_id = get_first_profile_id(service)
-        #results = get_results(service, profile_id)
         return render_to_response("googleAnalytics/index.html", {
             "profile_name": None,
             "sessions": None
@@ -60,7 +59,10 @@ def index(request):
 
 @login_required
 def dot_chart(request):
-    return HttpResponse("This is a stub")
+    query_result = HourlyDataModel.objects.all()
+    return render_to_response("googleAnalytics/dot_chart.html", {
+            "query_result": query_result
+        })
 
 @login_required
 def hit_api(request):
@@ -90,13 +92,14 @@ def hit_api(request):
                                       service, profile_id)
         rows = results.get("rows")
         for row in rows:
-            #datestr, hour, num_sessions = *row # Unpack the row for readability
-            # TODO only create the model if it does not already exist
-            new_model = HourlyDataModel(hour = int(row[1]),
-                             date = create_date_from_str(row[0], "%Y%m%d"),
-                             num_sessions = int(row[2]))
-            new_model.save() # Persist the data
-        # TODO communicate that the db has been updated better. With redirect?
+            row_date = create_date_from_str(row[0], "%Y%m%d")
+            row_hour = int(row[1])
+            row_sessions = int(row[2])
+            # create a model if it does not exist for that date and hour
+            HourlyDataModel.objects.get_or_create(date = row_date,
+                                        hour = row_hour,
+                                        defaults={"num_sessions":row_sessions})
+        # TODO communicate that the db has been updated better. With messages.
         return HttpResponse("Database updated")
 
 
