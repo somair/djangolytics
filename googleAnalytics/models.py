@@ -12,6 +12,8 @@ class CredentialsModel(models.Model):
 
 class HourlyDataModel(models.Model):
     user = models.ForeignKey(User)
+    # This a date rather then a date time since it comes from the api that way
+    # and it would need to be separated for viewing sake anyways
     date = models.DateField("The date that the session occurred")
     hour = models.IntegerField("The hour that the session occurred",
             validators=[MaxValueValidator(23), MinValueValidator(0)])
