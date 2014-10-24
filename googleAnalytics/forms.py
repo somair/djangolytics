@@ -7,7 +7,7 @@ def date_order_validator(start_date, end_date):
     """Throws a validation error if the end date is before the start date"""
     if start_date < end_date:
         raise ValidationError("End date cannot be before Start date",
-                code="date order"):
+                code="date order")
 
 class StartEndDateForm(forms.Form):
     start_date = forms.DateField(label="Start date:",
