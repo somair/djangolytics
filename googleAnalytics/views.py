@@ -105,7 +105,8 @@ def hit_api(request):
         row_hour = int(row[1])
         row_sessions = int(row[2])
         # create a model if it does not exist for that date and hour
-        HourlyDataModel.objects.get_or_create(date = row_date,
+        HourlyDataModel.objects.get_or_create(user=request.user
+                                    date = row_date,
                                     hour = row_hour,
                                     defaults={"num_sessions":row_sessions})
     # TODO communicate that the db has been updated better. With messages.

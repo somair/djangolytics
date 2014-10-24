@@ -9,6 +9,11 @@
     {% block scripts %}{% endblock %}
 </head>
 <body>
+    {% if request.user %}
+        <div>welcome, {{ request.user.username }}</div>
+        <div><a href="/logout">logout</a></div>
+    {% endif %}
+
     <div id="content">
         {% block content %}{% endblock %}
     </div>
