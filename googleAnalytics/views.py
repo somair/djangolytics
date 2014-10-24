@@ -93,8 +93,8 @@ def hit_api(request):
             #datestr, hour, num_sessions = *row # Unpack the row for readability
             # TODO only create the model if it does not already exist
             new_model = HourlyDataModel(hour = int(row[1]),
-                                 date = create_date_from_str(row[0]),
-                                 num_sessions = int(row[2]))
+                             date = create_date_from_str(row[0], "%Y%m%d"),
+                             num_sessions = int(row[2]))
             new_model.save() # Persist the data
         # TODO communicate that the db has been updated better. With redirect?
         return HttpResponse("Database updated")
