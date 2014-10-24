@@ -23,6 +23,7 @@ from googleAnalytics.api_helper import get_user_credentials
 from googleAnalytics.api_helper import get_service_object
 from googleAnalytics.api_helper import get_first_profile_id
 from googleAnalytics.api_helper import get_hourly_sessions
+from googleAnalytics.utils import create_date_from_str
 
 
 # Which apis the app is requesting access to
@@ -92,7 +93,7 @@ def hit_api(request):
             #datestr, hour, num_sessions = *row # Unpack the row for readability
             # TODO only create the model if it does not already exist
             new_model = HourlyDataModel(hour = int(row[1]),
-                                 date = date.strptime(row[0], "%Y%m%d"),
+                                 date = create_date_from_str(row[0]),
                                  num_sessions = int(row[2]))
             new_model.save() # Persist the data
         # TODO communicate that the db has been updated better. With redirect?
