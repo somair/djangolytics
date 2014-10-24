@@ -7,6 +7,20 @@ insight into when your page is being viewed.
 
 [Take a look here][APP_URL]
 
+## Manual testing
+
+To test the app you need a google account with Google analytics collecting
+data. Follow the proceeding steps:
+
+1. login to the site with one of username-password pairs
+2. authenticate with google
+3. click the "update database" link. Enter a range of dates. (e.g. "2014-01-01"
+   and "2014-10-20"). click "query api" button. After the data is gathered from
+   the api it will be inserted into the database, and you will be redirected to
+   the home page.
+4. click the "view dot chart" link. Enter a range of dates and click "query
+   database". The page will then draw you a lovely dot chart.
+
 ## Local development
 
 Development on your local machine is extremely constrained because the user
