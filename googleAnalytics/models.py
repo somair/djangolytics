@@ -11,6 +11,7 @@ class CredentialsModel(models.Model):
     credential = CredentialsField()
 
 class HourlyDataModel(models.Model):
+    user = models.ForeignKey(User)
     date = models.DateField("The date that the session occurred")
     hour = models.IntegerField("The hour that the session occurred",
             validators=[MaxValueValidator(23), MinValueValidator(0)])
