@@ -23,6 +23,6 @@ class StartEndDateForm(forms.Form):
         # Perform parent validations
         cleaned_data = super(StartEndDateForm, self).clean()
         clean_start = cleaned_data["start_date"]
-        clean_end = cleaned_data["start_end"]
+        clean_end = cleaned_data["end_date"]
         date_order_validator(clean_start, clean_end)
 
