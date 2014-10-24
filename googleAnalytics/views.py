@@ -6,7 +6,6 @@ from datetime import date
 # Django imports
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.http import HttpResponseBadRequest
@@ -51,7 +50,7 @@ def index(request):
         # User is authenticated
         service = get_service_object(credential)
         profile_id = get_first_profile_id(service)
-        return render_to_response("googleAnalytics/index.html", {
+        return render(request, "googleAnalytics/index.html", {
             "profile_name": None,
             "sessions": None
             })
@@ -116,7 +115,8 @@ def hit_api(request):
 @login_required
 def auth_return(request):
     if not xsrfutil.validate_token(settings.SECRET_KEY,
-                                   request.REQUEST["state"], request.user):
+                                   request.REQUEST["state"],
+                                   request.user):
         return HttpResponseBadRequest()
     # Exchange the Auth code for a OAuth Token
     credential = FLOW.step2_exchange(request.GET)
