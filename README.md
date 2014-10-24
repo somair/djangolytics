@@ -48,4 +48,16 @@ This app is designed to be deployed to heroku.
 - Python 2.7
 - Django 1.7
 
+## Potential improvements
+
+- have the form on the 'dot_chart' page use GET query string parameters. It
+  would make it more clear what is being queried and would make it easier to
+  populate the form after updating the database.
+- Much better tests
+- Prevent the form from allowing future and present dates
+- Handle the OAuth refresh tokens differently. Currently not a security issue
+  but means that users have to go through the OAuth process more than they
+  should need to
+- Allow users to select which website's data they would like to view.
+
 [APP_URL]: http://sleepy-river-9090.herokuapp.com/

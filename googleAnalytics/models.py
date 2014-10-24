@@ -17,7 +17,6 @@ class HourlyDataModel(models.Model):
             validators=[MaxValueValidator(23), MinValueValidator(0)])
     num_sessions = models.IntegerField("The number of sessions",
             validators=[MinValueValidator(0)])
-    #TODO relate this to a user
 
     def __unicode__(self):
         formattable_str = "date:{}  hour:{}  number of sessions:{}"

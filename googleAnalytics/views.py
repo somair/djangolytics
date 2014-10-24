@@ -56,7 +56,6 @@ def index(request):
             "sessions": None
             })
 
-#TODO can this be done with a get request?
 @login_required
 def dot_chart(request):
     if request.method == "GET":
