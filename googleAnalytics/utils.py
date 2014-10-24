@@ -19,7 +19,7 @@ def generate_dot_chart_data(query_set):
     dot_chart_data = [0 for i in range(7 * 24)]
     for model in query_result:
         # The day of the week where sunday is 0 and saturday is 6
-        row = model.date.weekday()+1)%7
+        row = (model.date.weekday()+1)%7
         col = model.hour
         dot_chart_data[(row*24)+col)] += model.num_sessions
     return dot_chart_data
