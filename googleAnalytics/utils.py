@@ -17,7 +17,7 @@ def generate_dot_chart_data(query_set):
     """Generates an array suitable for the dotchart when passed a set of
     HourlySessionModels"""
     dot_chart_data = [0 for i in range(7 * 24)]
-    for model in query_result:
+    for model in query_set:
         # The day of the week where sunday is 0 and saturday is 6
         row = (model.date.weekday()+1)%7
         col = model.hour
