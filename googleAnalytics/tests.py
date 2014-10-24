@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from googleAnalytics.models import HourlyDataModel
 from googleAnalytics.utils import create_date_from_str
 
-# Create your tests here.
 class HourlyDataModelTestCase(TestCase):
     def setUp(self):
         self.dt1 = create_date_from_str("2014-10-05")
@@ -33,5 +32,4 @@ class HourlyDataModelTestCase(TestCase):
         for params in bad_params:
             m = HourlyDataModel(**params)
             self.assertRaises(ValidationError, m.clean_fields)
-
 

@@ -10,15 +10,13 @@ class CredentialsModel(models.Model):
     id = models.ForeignKey(User, primary_key=True)
     credential = CredentialsField()
 
-#TODO add constraints to hour and num_sessions
 class HourlyDataModel(models.Model):
     date = models.DateField("The date that the session occurred")
     hour = models.IntegerField("The hour that the session occurred",
             validators=[MaxValueValidator(23), MinValueValidator(0)])
-    #TODO consider subclassing to add min value and max value
     num_sessions = models.IntegerField("The number of sessions",
             validators=[MinValueValidator(0)])
-    #TODO consider subclassing to add min value
+    #TODO relate this to a user
 
     def __unicode__(self):
         formattable_str = "date:{}  hour:{}  number of sessions:{}"

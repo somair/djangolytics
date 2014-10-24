@@ -37,8 +37,6 @@ FLOW = OAuth2WebServerFlow(client_id = os.environ["GA_CLIENT_ID"],
                            scope = SCOPE,
                            redirect_uri = REDIRECT_URI)
 
-# TODO combine a few of these views to reduce the number of urls used.
-
 @login_required
 def index(request):
     credential = get_user_credentials(request.user) # Attempt to load the user's credentials
@@ -69,13 +67,15 @@ def dot_chart(request):
         return render(request, "googleAnalytics/dot_chart.html",
                 {"form": date_pick_form, "query_result": None})
     # The request is POST and start and end are valid
-    request.POST["start_date"],
-    request.POST["end_date"],
-    query_result = HourlyDataModel.objects.all() #TODO make the passed date work
+    query_result = HourlyDataModel.objects.filter(date__range=[
+                                                request.POST["start_date"],
+                                                request.POST["end_date"]])
 
+    # Create an array of data from the results of the query
     dot_chart_data = generate_dot_chart_data(query_result)
     return render(request, "googleAnalytics/dot_chart.html", {
-        "form": date_pick_form, "dot_chart_data": dot_chart_data})
+                                            "form": date_pick_form,
+                                            "dot_chart_data": dot_chart_data})
 
 @login_required
 def hit_api(request):
