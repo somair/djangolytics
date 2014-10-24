@@ -23,4 +23,12 @@ class HourlyDataModelTestCase(TestCase):
         self.assertEquals(time2.num_sessions, 2)
         self.assertEquals(time2.date, self.dt2)
 
+    def test_HourlyDataModel_bad_construtor(self):
+        bad_params = [
+            {"date":self.dt1, "hour":-1, "num_sessions": 2},
+            {"date":self.dt1, "hour":24, "num_sessions": 2}
+        ]
+        for params in bad_params:
+            self.assertRaises(RuntimeError, HourlyDataModel, params)
+
 

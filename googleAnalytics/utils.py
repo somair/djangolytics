@@ -11,4 +11,4 @@ def create_str_from_date(date_obj):
     """Accepts a Date object. Returns string in the format '%Y-%m-%d'. This
     helper function exists since there is no strptime function for Date
     objects, only Datetime objects"""
-    return date.strftime(date_obj, "%Y-%m-%d"))
+    return date.strftime(date_obj, "%Y-%m-%d")

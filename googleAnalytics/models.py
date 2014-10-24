@@ -12,4 +12,7 @@ class CredentialsModel(models.Model):
 class HourlyDataModel(models.Model):
     date = models.DateField("The date that the session occurred")
     hour = models.IntegerField("The hour that the session occurred")
+    #TODO consider subclassing to add min value and max value
+    #TODO use unique for date
     num_sessions = models.IntegerField("The number of sessions")
+    #TODO consider subclassing to add min value
