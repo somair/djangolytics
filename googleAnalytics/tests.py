@@ -1,5 +1,6 @@
 from datetime import date
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 from googleAnalytics.models import HourlyDataModel
 from googleAnalytics.utils import create_date_from_str
 
@@ -26,9 +27,11 @@ class HourlyDataModelTestCase(TestCase):
     def test_HourlyDataModel_bad_construtor(self):
         bad_params = [
             {"date":self.dt1, "hour":-1, "num_sessions": 2},
-            {"date":self.dt1, "hour":24, "num_sessions": 2}
+            {"date":self.dt1, "hour":24, "num_sessions": 2},
+            {"date":self.dt1, "hour":2, "num_sessions": -1}
         ]
         for params in bad_params:
-            self.assertRaises(RuntimeError, HourlyDataModel, params)
+            m = HourlyDataModel(**params)
+            self.assertRaises(ValidationError, m.clean_fields)
 
 

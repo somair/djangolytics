@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator
+from django.core.validators import MinValueValidator
 
 from oauth2client.django_orm import CredentialsField
 
@@ -11,9 +13,11 @@ class CredentialsModel(models.Model):
 #TODO add constraints to hour and num_sessions
 class HourlyDataModel(models.Model):
     date = models.DateField("The date that the session occurred")
-    hour = models.IntegerField("The hour that the session occurred")
+    hour = models.IntegerField("The hour that the session occurred",
+            validators=[MaxValueValidator(23), MinValueValidator(0)])
     #TODO consider subclassing to add min value and max value
-    num_sessions = models.IntegerField("The number of sessions")
+    num_sessions = models.IntegerField("The number of sessions",
+            validators=[MinValueValidator(0)])
     #TODO consider subclassing to add min value
 
     def __unicode__(self):
