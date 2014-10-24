@@ -8,7 +8,9 @@ urlpatterns = patterns('',
     url(r'^oauth2callback$', "googleAnalytics.views.auth_return"),
 
     url(r'^admin/', include(admin.site.urls)),
+
     url(r'^accounts/login/$', "django.contrib.auth.views.login",
                               {"template_name": "googleAnalytics/login.html"}),
-    url(r'^accounts/logout/$', "django.contrib.auth.views.logout"),
+    url(r'^accounts/logout/$', "django.contrib.auth.views.logout")
+                              {"template_name": "googleAnalytics/logout.html"}),
 )
