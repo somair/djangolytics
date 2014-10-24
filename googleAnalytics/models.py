@@ -16,7 +16,7 @@ class HourlyDataModel(models.Model):
     num_sessions = models.IntegerField("The number of sessions")
     #TODO consider subclassing to add min value
 
-    def __unicode__():
+    def __unicode__(self):
         formattable_str = "date:{}  hour:{}  number of sessions:{}"
         return formattable_str.format(self.date, self.hour, self.num_sessions)
 
