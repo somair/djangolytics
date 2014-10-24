@@ -9,7 +9,7 @@
     {% block scripts %}{% endblock %}
 </head>
 <body>
-    {% if user %}
+    {% if user.is_authenticated %}
         <div>welcome, {{ user.get_username }}</div>
         <div><a href="/accounts/logout">logout</a></div>
     {% endif %}
