@@ -112,8 +112,8 @@ def hit_api(request):
                                     date = row_date,
                                     hour = row_hour,
                                     defaults={"num_sessions":row_sessions})
-    # TODO communicate that the db has been updated better. With messages.
-    messages.sucess(request, "Database updated successfully.")
+    # communicate that the db has been updated with messages.
+    messages.success(request, "Database updated successfully.")
     return HttpResponseRedirect("/")
 
 @login_required
