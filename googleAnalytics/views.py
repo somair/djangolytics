@@ -24,6 +24,7 @@ from googleAnalytics.api_helper import get_service_object
 from googleAnalytics.api_helper import get_first_profile_id
 from googleAnalytics.api_helper import get_hourly_sessions
 from googleAnalytics.utils import create_date_from_str
+from googleAnalytics.utils import generate_dot_chart_data
 
 
 # Which apis the app is requesting access to
@@ -71,8 +72,10 @@ def dot_chart(request):
     request.POST["start_date"],
     request.POST["end_date"],
     query_result = HourlyDataModel.objects.all() #TODO make the passed date work
+
+    dot_chart_data = generate_dot_chart_data(query_result)
     return render(request, "googleAnalytics/dot_chart.html", {
-        "form": date_pick_form, "query_result": query_result})
+        "form": date_pick_form, "dot_chart_data": dot_chart_data})
 
 @login_required
 def hit_api(request):
