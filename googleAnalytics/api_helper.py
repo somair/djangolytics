@@ -1,6 +1,7 @@
 import httplib2
 from apiclient.discovery import build
 from googleAnalytics.models import CredentialsModel
+from oauth2client.client import AccessTokenRefreshError
 from oauth2client.django_orm import Storage
 
 def get_user_credentials(user):
@@ -17,8 +18,12 @@ def get_service_object(credential):
 def get_first_profile_id(service):
     """Returns the profile id of the user. Stolen from the tutorial:
         bit.ly/1wmZJqn"""
-    # Get all the GA accounts associated with the service object's user.
-    accounts = service.management().accounts().list().execute()
+    try:
+        # Get all the GA accounts associated with the service object's user.
+        accounts = service.management().accounts().list().execute()
+    except AccessTokenRefreshError:
+        # The access token is stale. Should be storing the refresh tokens?
+        return None
     if accounts and accounts.get('items'):
         firstAccountId = accounts.get('items')[0].get('id')
         # Get a webproperties list with the first account's id
