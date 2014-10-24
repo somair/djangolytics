@@ -4,6 +4,7 @@
 import os
 from datetime import date
 # Django imports
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -112,8 +113,8 @@ def hit_api(request):
                                     hour = row_hour,
                                     defaults={"num_sessions":row_sessions})
     # TODO communicate that the db has been updated better. With messages.
-    return HttpResponse("Database updated")
-
+    messages.sucess(request, "Database updated successfully.")
+    return HttpResponseRedirect("/")
 
 @login_required
 def auth_return(request):
