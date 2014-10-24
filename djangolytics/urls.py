@@ -11,6 +11,6 @@ urlpatterns = patterns('',
 
     url(r'^accounts/login/$', "django.contrib.auth.views.login",
                               {"template_name": "googleAnalytics/login.html"}),
-    url(r'^accounts/logout/$', "django.contrib.auth.views.logout")
+    url(r'^accounts/logout/$', "django.contrib.auth.views.logout",
                               {"template_name": "googleAnalytics/logout.html"}),
 )
