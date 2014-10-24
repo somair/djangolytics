@@ -66,9 +66,11 @@ def dot_chart(request):
         return render(request, "googleAnalytics/dot_chart.html",
                 {"form": date_pick_form, "query_result": None})
     # The request is POST and start and end are valid
-    query_result = HourlyDataModel.objects.filter(date__range=[
-                                                request.POST["start_date"],
-                                                request.POST["end_date"]])
+    query_result = HourlyDataModel.objects.filter(user=request.user,
+                                                  date__range=[
+                                                  request.POST["start_date"],
+                                                  request.POST["end_date"]
+                                                  ])
 
     # Create an array of data from the results of the query
     dot_chart_data = generate_dot_chart_data(query_result)
