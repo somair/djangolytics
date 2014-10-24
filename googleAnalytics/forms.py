@@ -5,7 +5,7 @@ DATE_HELP_STR = "Dates must be of the form YYYY-MM-DD"
 
 def date_order_validator(start_date, end_date):
     """Throws a validation error if the end date is before the start date"""
-    if start_date < end_date:
+    if end_date < start_date:
         raise ValidationError("End date cannot be before Start date",
                 code="date order")
 
