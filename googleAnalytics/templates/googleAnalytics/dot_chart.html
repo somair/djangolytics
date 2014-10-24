@@ -3,14 +3,6 @@
 <ol>
 {% for result in query_result %}
     <li>
-        {{ result.__unicode__() }}
-    </li>
-{% endfor %}
-</ol>
-
-<ol>
-{% for result in query_result %}
-    <li>
         {{ result }}
     </li>
 {% endfor %}
