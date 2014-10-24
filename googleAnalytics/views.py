@@ -59,10 +59,19 @@ def index(request):
 
 @login_required
 def dot_chart(request):
-    query_result = HourlyDataModel.objects.all()
-    return render_to_response("googleAnalytics/dot_chart.html", {
-            "query_result": query_result
-        })
+    if request.method == "GET":
+        date_pick_form = StartEndDateForm()
+    else:
+        date_pick_form = StartEndDateForm(request.POST)
+    if request.method == "GET" or not date_pick_form.is_valid():
+        return render(request, "googleAnalytics/dot_chart.html",
+                {"form": date_pick_form, "query_result": None})
+    # The request is POST and start and end are valid
+    request.POST["start_date"],
+    request.POST["end_date"],
+    query_result = HourlyDataModel.objects.all() #TODO make the passed date work
+    return render(request, "googleAnalytics/dot_chart.html", {
+        "form": date_pick_form, "query_result": query_result})
 
 @login_required
 def hit_api(request):
@@ -70,37 +79,35 @@ def hit_api(request):
     if credential is None or credential.invalid == True:
         # User is not authorized. Go to the index to get authorized.
         return HttpResponseRedirect("/")
-    else:
-        # User is authorized.
-        service = get_service_object(credential)
-        profile_id = get_first_profile_id(service)
+    # User is authorized.
+    service = get_service_object(credential)
+    profile_id = get_first_profile_id(service)
 
-        if request.method == "GET":
-            date_pick_form = StartEndDateForm()
-            return render(request, "googleAnalytics/pick_date.html",
-                          {"form": date_pick_form})
-        else:
-            # The request is POST
-            date_pick_form = StartEndDateForm(request.POST)
-        if not date_pick_form.is_valid():
-            return render(request, "googleAnalytics/pick_date.html",
-                          {"form": date_pick_form})
+    if request.method == "GET":
+        date_pick_form = StartEndDateForm()
+        return render(request, "googleAnalytics/pick_date.html",
+                      {"form": date_pick_form})
+    # The request is POST
+    date_pick_form = StartEndDateForm(request.POST)
+    if not date_pick_form.is_valid():
+        return render(request, "googleAnalytics/pick_date.html",
+                      {"form": date_pick_form})
 
-        # Query the API
-        results = get_hourly_sessions(request.POST["start_date"],
-                                      request.POST["end_date"],
-                                      service, profile_id)
-        rows = results.get("rows")
-        for row in rows:
-            row_date = create_date_from_str(row[0], "%Y%m%d")
-            row_hour = int(row[1])
-            row_sessions = int(row[2])
-            # create a model if it does not exist for that date and hour
-            HourlyDataModel.objects.get_or_create(date = row_date,
-                                        hour = row_hour,
-                                        defaults={"num_sessions":row_sessions})
-        # TODO communicate that the db has been updated better. With messages.
-        return HttpResponse("Database updated")
+    # Query the API
+    results = get_hourly_sessions(request.POST["start_date"],
+                                  request.POST["end_date"],
+                                  service, profile_id)
+    rows = results.get("rows")
+    for row in rows:
+        row_date = create_date_from_str(row[0], "%Y%m%d")
+        row_hour = int(row[1])
+        row_sessions = int(row[2])
+        # create a model if it does not exist for that date and hour
+        HourlyDataModel.objects.get_or_create(date = row_date,
+                                    hour = row_hour,
+                                    defaults={"num_sessions":row_sessions})
+    # TODO communicate that the db has been updated better. With messages.
+    return HttpResponse("Database updated")
 
 
 @login_required
