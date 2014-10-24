@@ -1,5 +1,11 @@
 import httplib2
 from apiclient.discovery import build
+from oauth2client.django_orm import Storage
+
+def get_user_credentials(user):
+    """Retrives the users credentials from storage"""
+    storage = Storage(CredentialsModel, "id", user, "credential")
+    return storage.get() # load the user's credentials from storage
 
 def get_service_object(credential):
     """Creates a service object for the google analytics api"""

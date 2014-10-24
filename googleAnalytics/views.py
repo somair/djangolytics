@@ -19,8 +19,9 @@ from djangolytics import settings
 from googleAnalytics.models import CredentialsModel
 from googleAnalytics.models import HourlyDataModel
 from googleAnalytics.forms import StartEndDateForm
-from googleAnalytics.api_helper import get_first_profile_id
+from googleAnalytics.api_helper import get_user_credential
 from googleAnalytics.api_helper import get_service_object
+from googleAnalytics.api_helper import get_first_profile_id
 from googleAnalytics.api_helper import get_hourly_sessions
 
 
@@ -38,8 +39,7 @@ FLOW = OAuth2WebServerFlow(client_id = os.environ["GA_CLIENT_ID"],
 
 @login_required
 def index(request):
-    storage = Storage(CredentialsModel, "id", request.user, "credential")
-    credential = storage.get() # Attempt to load the user's credentials
+    credential = get_user_credentials(request.user) # Attempt to load the user's credentials
     if credential is None or credential.invalid == True:
         # User not authenticated. Initiate the OAuth process
         FLOW.params["state"] = xsrfutil.generate_token(settings.SECRET_KEY,
@@ -63,8 +63,7 @@ def dot_chart(request):
 
 @login_required
 def hit_api(request):
-    storage = Storage(CredentialsModel, "id", request.user, "credential")
-    credential = storage.get() # Attempt to load the user's credentials
+    credential = get_user_credentials(request.user) # get user credentials
     if credential is None or credential.invalid == True:
         # User is not authorized. Go to the index to get authorized.
         return HttpResponseRedirect("/")
