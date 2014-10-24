@@ -85,13 +85,12 @@ def hit_api(request):
 
     if request.method == "GET":
         date_pick_form = StartEndDateForm()
+    else:
+        date_pick_form = StartEndDateForm(request.POST)
+    if request.method == "GET" and not date_pick_form.is_valid():
         return render(request, "googleAnalytics/pick_date.html",
                       {"form": date_pick_form})
-    # The request is POST
-    date_pick_form = StartEndDateForm(request.POST)
-    if not date_pick_form.is_valid():
-        return render(request, "googleAnalytics/pick_date.html",
-                      {"form": date_pick_form})
+    # From here on the request is POST
 
     # Query the API
     results = get_hourly_sessions(request.POST["start_date"],
