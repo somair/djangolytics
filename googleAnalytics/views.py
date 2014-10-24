@@ -2,7 +2,7 @@
 # Derived from code sample here: http://bit.ly/1pE98F9
 
 import os
-from datetime import datetime
+from datetime import date
 # Django imports
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -17,7 +17,7 @@ from oauth2client.django_orm import Storage
 # Project imports
 from djangolytics import settings
 from googleAnalytics.models import CredentialsModel
-from googleAnalytics.models import HourlySessions
+from googleAnalytics.models import HourlyDataModel
 from googleAnalytics.forms import StartEndDateForm
 from googleAnalytics.api_helper import get_first_profile_id
 from googleAnalytics.api_helper import get_service_object
@@ -92,9 +92,10 @@ def hit_api(request):
         for row in rows:
             #datestr, hour, num_sessions = *row # Unpack the row for readability
             # TODO only create the model if it does not already exist
-            new_model = HourlySessions(date = datetime.strptime(row[0], "%Y%m%d"),
-                                 hour = int(row[1]),
+            new_model = HourlyDataModel(hour = int(row[1]),
+                                 date = date.strptime(row[0], "%Y%m%d"),
                                  num_sessions = int(row[2]))
+            new_model.save() # Persist the data
         # TODO communicate that the db has been updated better. With redirect?
         return HttpResponse("Database updated")
 

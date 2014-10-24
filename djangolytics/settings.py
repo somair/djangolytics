@@ -17,8 +17,10 @@ import dj_database_url
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["APP_SECRET_KEY"]
+try:
+    SECRET_KEY = os.environ["APP_SECRET_KEY"]
+except:
+    SECRET_KEY = "abc123" # Used for testing
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

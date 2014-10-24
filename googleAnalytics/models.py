@@ -8,7 +8,8 @@ class CredentialsModel(models.Model):
     id = models.ForeignKey(User, primary_key=True)
     credential = CredentialsField()
 
-class HourlySessions(models.Model):
-    date = models.DateTimeField("The date that the session occurred")
+#TODO add constraints to hour and num_sessions
+class HourlyDataModel(models.Model):
+    date = models.DateField("The date that the session occurred")
     hour = models.IntegerField("The hour that the session occurred")
     num_sessions = models.IntegerField("The number of sessions")
