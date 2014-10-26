@@ -1,8 +1,12 @@
+from datetime import datetime
 from datetime import date
+# Django imports
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+# App imports
 from googleAnalytics.models import HourlyDataModel
+from googleAnalytics.utils import create_str_from_date
 from googleAnalytics.utils import create_date_from_str
 
 class HourlyDataModelTestCase(TestCase):
@@ -39,3 +43,24 @@ class HourlyDataModelTestCase(TestCase):
             m = HourlyDataModel(**params)
             self.assertRaises(ValidationError, m.clean_fields)
 
+class UtilsTestCase(TestCase):
+    def test_date_from_str(self):
+        in_str = "2014-01-01"
+        cannon_date = datetime.strptime(in_str, "%Y-%m-%d").date()
+        out_date = create_date_from_str(in_str)
+        self.assertEquals(cannon_date, out_date)
+        in_str = "20140101"
+        out_date = create_date_from_str(in_str, "%Y%m%d")
+        self.assertEquals(cannon_date, out_date)
+
+        #TODO misbehaving calls
+        #TODO Different formats
+
+    def test_str_from_date(self):
+        in_date = datetime.strptime("2014-01-01", "%Y-%m-%d").date()
+        cannon_str = "2014-01-01"
+        out_str = create_str_from_date(in_date)
+        self.assertEquals(cannon_str, out_str)
+        cannon_str = "20140101"
+        out_str = create_str_from_date(in_date, "%Y%m%d")
+        self.assertEquals(cannon_str, out_str)
