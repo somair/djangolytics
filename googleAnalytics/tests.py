@@ -12,6 +12,11 @@ from googleAnalytics.utils import create_date_from_str
 from googleAnalytics.utils import generate_dot_chart_data
 from googleAnalytics.forms import StartEndDateForm
 from googleAnalytics.forms import date_order_validator
+from googleAnalytics.api_helper import get_user_credentials
+from googleAnalytics.api_helper import get_service_object
+from googleAnalytics.api_helper import get_first_profile_id
+from googleAnalytics.api_helper import get_hourly_sessions
+from googleAnalytics.views import index
 
 class HourlyDataModelTestCase(TestCase):
     def setUp(self):
@@ -102,7 +107,7 @@ class UtilsTestCase(TestCase):
         self.assertEquals(168, len(result))
         self.assertEquals(cannon_result, result)
 
-class FomsTestCase(TestCase):
+class FormsTestCase(TestCase):
     def test_date_order_validator(self):
         """Should raise a validation error if the second date is before the
         first date"""
@@ -127,4 +132,16 @@ class FomsTestCase(TestCase):
         for form_data in form_data_bad:
             form = StartEndDateForm(form_data)
             self.assertFalse(form.is_valid())
+
+class ApiHelperTestCase(TestCase):
+    def test_get_user_credentials(self):
+        #Storage = Mock()
+        #mock_user = Mock(id=1)
+        #credentials = get_user_credentials(mock_user)
+        #self.assertEquals(credentials, None)
+        pass
+
+class ViewsTestCase(TestCase):
+    def test_index_view(self):
+        pass
 
