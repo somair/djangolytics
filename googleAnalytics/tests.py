@@ -112,3 +112,19 @@ class FomsTestCase(TestCase):
         self.assertEquals(None, date_order_validator(date1, date1))
         self.assertRaises(ValidationError, date_order_validator, date2, date1)
 
+    def test_StartEndDateForm(self):
+        form_data_good = [{"start_date":"2014-01-01", "end_date":"2014-01-01"},
+                          {"start_date":"2014-01-01", "end_date":"2014-02-02"}]
+        for form_data in form_data_good:
+            form = StartEndDateForm(form_data)
+            self.assertTrue(form.is_valid())
+
+        form_data_bad = [{"start_date":"", "end_date":""},
+                         {"start_date":"2014-01-01", "end_date":""},
+                         {"start_date":"2014-01-01", "end_date":"badger"},
+                         {"start_date":"", "end_date":"2014-02-02"},
+                         {"start_date":"20140101", "end_date":"20140202"}]
+        for form_data in form_data_bad:
+            form = StartEndDateForm(form_data)
+            self.assertFalse(form.is_valid())
+

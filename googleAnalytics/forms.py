@@ -22,7 +22,10 @@ class StartEndDateForm(forms.Form):
         """Perform validation between fields"""
         # Perform parent validations
         cleaned_data = super(StartEndDateForm, self).clean()
-        clean_start = cleaned_data["start_date"]
-        clean_end = cleaned_data["end_date"]
-        date_order_validator(clean_start, clean_end)
+        try:
+            clean_start = cleaned_data["start_date"]
+            clean_end = cleaned_data["end_date"]
+            date_order_validator(clean_start, clean_end)
+        except KeyError:
+            pass
 
