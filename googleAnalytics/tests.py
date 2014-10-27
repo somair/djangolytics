@@ -1,3 +1,4 @@
+from mock import Mock
 from datetime import datetime
 from datetime import date
 # Django imports
@@ -8,6 +9,7 @@ from django.contrib.auth.models import User
 from googleAnalytics.models import HourlyDataModel
 from googleAnalytics.utils import create_str_from_date
 from googleAnalytics.utils import create_date_from_str
+from googleAnalytics.utils import generate_dot_chart_data
 
 class HourlyDataModelTestCase(TestCase):
     def setUp(self):
@@ -44,23 +46,36 @@ class HourlyDataModelTestCase(TestCase):
             self.assertRaises(ValidationError, m.clean_fields)
 
 class UtilsTestCase(TestCase):
-    def test_date_from_str(self):
-        in_str = "2014-01-01"
-        cannon_date = datetime.strptime(in_str, "%Y-%m-%d").date()
-        out_date = create_date_from_str(in_str)
-        self.assertEquals(cannon_date, out_date)
-        in_str = "20140101"
-        out_date = create_date_from_str(in_str, "%Y%m%d")
-        self.assertEquals(cannon_date, out_date)
+    def setUp(self):
+        self.cannon_date = datetime.strptime("2014-01-01", "%Y-%m-%d").date()
+        self.day_after = datetime.strptime("2014-01-02", "%Y-%m-%d").date()
+        self.week_after = datetime.strptime("2014-01-08", "%Y-%m-%d").date()
+        self.m1 = Mock(date=self.cannon_date, hour=1, num_sessions=1)
 
-        #TODO misbehaving calls
-        #TODO Different formats
+        # TODO test incorrect inputs to these util functions
+
+    def test_date_from_str(self):
+        out_date = create_date_from_str("2014-01-01")
+        self.assertEquals(self.cannon_date, out_date)
+        out_date = create_date_from_str("20140101", "%Y%m%d")
+        self.assertEquals(self.cannon_date, out_date)
 
     def test_str_from_date(self):
-        in_date = datetime.strptime("2014-01-01", "%Y-%m-%d").date()
-        cannon_str = "2014-01-01"
-        out_str = create_str_from_date(in_date)
-        self.assertEquals(cannon_str, out_str)
-        cannon_str = "20140101"
-        out_str = create_str_from_date(in_date, "%Y%m%d")
-        self.assertEquals(cannon_str, out_str)
+        out_str = create_str_from_date(self.cannon_date)
+        self.assertEquals("2014-01-01", out_str)
+        out_str = create_str_from_date(self.cannon_date, "%Y%m%d")
+        self.assertEquals("20140101", out_str)
+
+    def test_generate_dot_chart_data(self):
+        cannon_result = [0 for i in range(7 * 24)]  # All zeros
+        mock_query_set = []
+        result = generate_dot_chart_data(mock_query_set)
+        self.assertEquals(168, len(result))
+        self.assertEquals(cannon_result, result)  # Should be all zeros
+        mock_query_set.append(self.m1)  # Add a mocked model
+        cannon_result[(24*3)+1] = 1  # Set 1am wednesday to 1 session
+        result = generate_dot_chart_data(mock_query_set)
+        self.assertEquals(168, len(result))
+        self.assertEquals(cannon_result, result)
+
+
