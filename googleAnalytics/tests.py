@@ -51,6 +51,9 @@ class UtilsTestCase(TestCase):
         self.day_after = datetime.strptime("2014-01-02", "%Y-%m-%d").date()
         self.week_after = datetime.strptime("2014-01-08", "%Y-%m-%d").date()
         self.m1 = Mock(date=self.cannon_date, hour=1, num_sessions=1)
+        self.m2 = Mock(date=self.day_after, hour=1, num_sessions=2)
+        self.m3 = Mock(date=self.week_after, hour=1, num_sessions=2)
+        self.m4 = Mock(date=self.cannon_date, hour=3, num_sessions=4)
 
         # TODO test incorrect inputs to these util functions
 
@@ -72,10 +75,28 @@ class UtilsTestCase(TestCase):
         result = generate_dot_chart_data(mock_query_set)
         self.assertEquals(168, len(result))
         self.assertEquals(cannon_result, result)  # Should be all zeros
+
         mock_query_set.append(self.m1)  # Add a mocked model
         cannon_result[(24*3)+1] = 1  # Set 1am wednesday to 1 session
         result = generate_dot_chart_data(mock_query_set)
         self.assertEquals(168, len(result))
         self.assertEquals(cannon_result, result)
 
+        mock_query_set.append(self.m2)  # Add another mocked model
+        cannon_result[(24*4)+1] = 2  # Set 1am thursday to 2 sessions
+        result = generate_dot_chart_data(mock_query_set)
+        self.assertEquals(168, len(result))
+        self.assertEquals(cannon_result, result)
+
+        mock_query_set.append(self.m3)  # Add another mocked model
+        cannon_result[(24*3)+1] = 3  # Set 1am wednesday to 3 sessions (2+1)
+        result = generate_dot_chart_data(mock_query_set)
+        self.assertEquals(168, len(result))
+        self.assertEquals(cannon_result, result)
+
+        mock_query_set.append(self.m4)  # Add another mocked model
+        cannon_result[(24*3)+3] = 4  # Set 3am wednesday to 4 sessions
+        result = generate_dot_chart_data(mock_query_set)
+        self.assertEquals(168, len(result))
+        self.assertEquals(cannon_result, result)
 
