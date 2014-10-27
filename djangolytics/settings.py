@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["*"]
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -66,6 +67,7 @@ DATABASES = {
         default="postgres://django:django@localhost/djangolyntics"
         )
 }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
