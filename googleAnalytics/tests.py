@@ -1,4 +1,4 @@
-from mock import Mock
+from mock import Mock, patch
 from datetime import datetime
 from datetime import date
 # Django imports
@@ -134,12 +134,17 @@ class FormsTestCase(TestCase):
             self.assertFalse(form.is_valid())
 
 class ApiHelperTestCase(TestCase):
-    def test_get_user_credentials(self):
-        #Storage = Mock()
-        #mock_user = Mock(id=1)
-        #credentials = get_user_credentials(mock_user)
-        #self.assertEquals(credentials, None)
-        pass
+    @patch("googleAnalytics.api_helper.Storage")
+    def test_get_user_credentials(self, mock_storage):
+        """Tests that the Storage class is called to get a storage object and
+        that objects get method is called in order to return user
+        credentials."""
+        mock_storage_object = Mock()
+        mock_storage_object.get.return_value = "user_credentials"
+        mock_storage.return_value = mock_storage_object
+        mock_user = Mock()
+        credentials = get_user_credentials(mock_user)
+        self.assertEquals(credentials, "user_credentials")
 
 class ViewsTestCase(TestCase):
     def test_index_view(self):
