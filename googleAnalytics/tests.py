@@ -10,6 +10,8 @@ from googleAnalytics.models import HourlyDataModel
 from googleAnalytics.utils import create_str_from_date
 from googleAnalytics.utils import create_date_from_str
 from googleAnalytics.utils import generate_dot_chart_data
+from googleAnalytics.forms import StartEndDateForm
+from googleAnalytics.forms import date_order_validator
 
 class HourlyDataModelTestCase(TestCase):
     def setUp(self):
@@ -99,4 +101,14 @@ class UtilsTestCase(TestCase):
         result = generate_dot_chart_data(mock_query_set)
         self.assertEquals(168, len(result))
         self.assertEquals(cannon_result, result)
+
+class FomsTestCase(TestCase):
+    def test_date_order_validator(self):
+        """Should raise a validation error if the second date is before the
+        first date"""
+        date1 = datetime.strptime("2014-01-01", "%Y-%m-%d").date()
+        date2 = datetime.strptime("2014-01-02", "%Y-%m-%d").date()
+        self.assertEquals(None, date_order_validator(date1, date2))
+        self.assertEquals(None, date_order_validator(date1, date1))
+        self.assertRaises(ValidationError, date_order_validator, date2, date1)
 
